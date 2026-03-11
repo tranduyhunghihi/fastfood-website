@@ -1,0 +1,19 @@
+.wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // position: absolute;
+}
+.container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;    
+    // position: relative;
+    // z-index: 0;
+}
+.content{
+    width: 1170px;
+}

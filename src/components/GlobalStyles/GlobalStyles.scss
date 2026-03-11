@@ -1,0 +1,24 @@
+@import 'normalize.css';
+
+:root{
+    --primary-color: white;
+    --shadow: 0 25px 50px -12px rgba(0, 0, 0, .25)
+}
+*{
+    padding: 0;
+    margin: 0;
+}
+html{
+    font-size: 62.5%;
+
+}
+body{
+    font-family: 'Roboto', 'sans-serif';
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+}
+.swiper-pagination-bullet {
+    width: 14px;
+    height: 14px;
+}
