@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSistrix } from '@fortawesome/free-brands-svg-icons';
-import { faThumbsUp } from '@fortawesome/free-regular-svg-icons';
+import { faCircleXmark, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
 import {
     faAngleLeft,
     faAngleRight,
@@ -82,6 +82,9 @@ function SideBar() {
     const [showLeft, setShowLeft] = useState(true);
     const [showRight, setShowRight] = useState(true);
     const [activeIndex, setActiveIndex] = useState(1);
+    const [input, setInput] = useState('');
+    const [focus, setFocus] = useState(false);
+    const [openSearch, setOpenSearch] = useState(false);
 
     const scrollAmount = 300;
 
@@ -113,6 +116,10 @@ function SideBar() {
         checkScroll();
     }, []);
 
+    const handleClear = () => {
+        setInput('');
+    };
+
     return (
         <div className={cx('wrapper')}>
             {showLeft && (
@@ -125,12 +132,38 @@ function SideBar() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </div>
             )}
+            {
+                <div className={cx('search-box', { open: openSearch })}>
+                    <div className={cx('input-container')}>
+                        <input
+                            className={cx('input-box')}
+                            type="text"
+                            value={input}
+                            placeholder="Tìm kiếm mọi thứ bạn muốn"
+                            onChange={(e) => setInput(e.target.value)}
+                            onFocus={() => setFocus(true)}
+                        />
+                        {focus && input && (
+                            <FontAwesomeIcon className={cx('btn-clear')} icon={faCircleXmark} onClick={handleClear} />
+                        )}
+                    </div>
+                    <button className={cx('btn-search')}>Tìm kiếm</button>
+                    <p className={cx('btn-close')} onClick={() => setOpenSearch(false)}>
+                        Đóng
+                    </p>
+                </div>
+            }
             <ul className={cx('sidebar-list')} ref={listRef} onScroll={checkScroll}>
                 {SIDE_BAR.map((item, index) => (
                     <li
                         key={index}
                         className={cx('sidebar-item', { active: activeIndex === index })}
-                        onClick={() => setActiveIndex(index)}
+                        onClick={() => {
+                            setActiveIndex(index);
+                            if (index === 0) {
+                                setOpenSearch(true);
+                            }
+                        }}
                     >
                         <div className={cx('icon')}>{item.icon}</div>
                         <p className={cx('title')}>{item.title}</p>

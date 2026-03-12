@@ -1,13 +1,13 @@
 .wrapper{
     display: flex;
-    width: 1200px;
+    width: 100%;
     overflow: hidden;
     height: 80px;
     position: sticky;
-    top: 80px;
+    top: 70px;
     z-index: 50;
     box-shadow: rgba(33, 35, 38, .2) 0px 10px 10px -10px;
-
+    background-color: var(--primary-color);
 }
 .wrapper::before,
 .wrapper::after{
@@ -98,7 +98,67 @@
 .title{
     font-size: 1.6rem;
     font-weight: 500;
+    user-select: none;
 }
 .active{
     color: #c8102e;
+}
+
+.search-box{
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary-color);
+    z-index: 51;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    user-select: none;
+}
+.search-box.open{
+    transform: translateX(0);
+}
+.input-container{
+    width: 70%;
+    margin: 0 25px;
+    position: relative;
+}
+.input-box{
+    width: 100%;
+    height: 44px;
+    border-radius: 6px;
+    padding-left: 12px;
+    border: 1px solid #e1e1e1;
+    &:hover{
+        border-color: #c8102e;
+    }
+    &:focus{
+        outline: none;
+        border-color: #3a3a3a;
+    }
+}
+
+.btn-search{
+    width: 120px;
+    height: 36px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin-right: 12px;
+    background-color: #c8102e;
+    color: var(--primary-color);
+    border-color: transparent;
+    cursor: pointer;
+}
+.btn-close{
+    cursor: pointer;
+}
+.btn-clear{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);    
+    cursor: pointer;
+    color: #5b5b5b;
 }
