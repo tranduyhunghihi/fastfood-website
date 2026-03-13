@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function NewPizza() {
     return (
         <div className={cx('wrapper')}>
-            <section id="recommend" className={cx('container')}>
+            <section id="newpizza" className={cx('container')}>
                 <h2 className={cx('title')}>NEW PIZZA</h2>
                 <div className={cx('banner')} style={{ backgroundImage: `url(${banner})` }}></div>
                 <div className="grid wide">

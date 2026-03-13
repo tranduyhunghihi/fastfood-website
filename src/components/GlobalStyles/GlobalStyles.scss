@@ -10,6 +10,7 @@
 }
 html{
     font-size: 62.5%;
+    scroll-behavior: smooth;
 
 }
 body{
@@ -22,3 +23,19 @@ body{
     width: 14px;
     height: 14px;
 }
+section{
+    scroll-margin-top: 180px;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    // &:visited{
+    //     color: inherit;
+    // }
+    // &:active{
+    //     color: inherit;
+    // }
+  }

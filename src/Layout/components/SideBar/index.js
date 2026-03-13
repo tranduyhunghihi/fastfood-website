@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSistrix } from '@fortawesome/free-brands-svg-icons';
 import { faCircleXmark, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
@@ -29,42 +30,52 @@ const SIDE_BAR = [
     {
         icon: <FontAwesomeIcon icon={faThumbsUp} />,
         title: 'BẠN SẼ THÍCH',
+        link: '#recommend',
     },
     {
         icon: <FontAwesomeIcon icon={faBreadSlice} />,
         title: 'BÁNH MỚI',
+        link: '#newpizza',
     },
     {
         icon: <FontAwesomeIcon icon={faCookieBite} />,
         title: 'MUA 1 TẶNG 1',
+        link: '#buy1get1',
     },
     {
         icon: <FontAwesomeIcon icon={faBreadSlice} />,
         title: 'COMBO MÙA LỄ',
+        link: '#festival-combo',
     },
     {
         icon: <FontAwesomeIcon icon={faPizzaSlice} />,
         title: 'PIZZA',
+        link: '#pizza',
     },
     {
         icon: <FontAwesomeIcon icon={faDrumstickBite} />,
         title: 'GÀ',
+        link: '#chicken',
     },
     {
         icon: <FontAwesomeIcon icon={faCheese} />,
         title: 'MÓN KHAI VỊ',
+        link: '#starter',
     },
     {
         icon: <FontAwesomeIcon icon={faBoxOpen} />,
         title: 'MY BOX',
+        link: '#mybox',
     },
     {
         icon: <FontAwesomeIcon icon={faGlassWater} />,
         title: 'THỨC UỐNG',
+        link: '#drink',
     },
     {
         icon: <FontAwesomeIcon icon={faFire} />,
         title: 'MENU 49K',
+        link: '#menu49k',
     },
     {
         icon: <FontAwesomeIcon icon={faPepperHot} />,
@@ -120,6 +131,11 @@ function SideBar() {
         setInput('');
     };
 
+    const scrollToSection = (link) => {
+        const section = document.querySelector(link);
+        section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
     return (
         <div className={cx('wrapper')}>
             {showLeft && (
@@ -157,11 +173,14 @@ function SideBar() {
                 {SIDE_BAR.map((item, index) => (
                     <li
                         key={index}
-                        className={cx('sidebar-item', { active: activeIndex === index })}
+                        className={cx('sidebar-item', { active: activeIndex === index && index !== 0 })}
                         onClick={() => {
                             setActiveIndex(index);
                             if (index === 0) {
                                 setOpenSearch(true);
+                            }
+                            if (item.link) {
+                                scrollToSection(item.link);
                             }
                         }}
                     >

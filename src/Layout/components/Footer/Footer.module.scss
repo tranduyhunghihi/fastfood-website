@@ -1,0 +1,39 @@
+.wrapper{
+    width: 1170px;
+    margin: 24px 0 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.footer-container{
+    height: 256px;
+    width: 1042px;
+    background-color: #efefef;
+    padding: 36px 64px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+.content{
+    width: 30%;
+}
+.logo{
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+.box-social{
+    display: flex;
+    justify-content: space-around;
+}
+.title{
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+.item {
+    font-size: 2rem;
+    color: #626262;
+    list-style: none;
+    margin-top: 6px;
+}

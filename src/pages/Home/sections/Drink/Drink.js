@@ -1,22 +1,22 @@
 import classNames from 'classnames/bind';
-import styles from './Pizza.module.scss';
+import styles from './Drink.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import banner from '../../../../public/assets/image/banner-pizza.webp';
-import pizza1 from '../../../../public/assets/image/pizza1.webp';
+import banner from '../../../../public/assets/image/banner-drink.webp';
+import drink1 from '../../../../public/assets/image/drink1.webp';
 
 const cx = classNames.bind(styles);
 
-function Pizza() {
+function Drink() {
     return (
         <div className={cx('wrapper')}>
-            <section id="pizza" className={cx('container')}>
-                <h2 className={cx('title')}>NEW PIZZA</h2>
+            <section id="drink" className={cx('container')}>
+                <h2 className={cx('title')}>DRINK</h2>
                 <div className={cx('banner')} style={{ backgroundImage: `url(${banner})` }}></div>
                 <div className="grid wide">
                     <div className="row">
                         <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>
-                            <img src={pizza1} alt="recommend1" className={cx('item-img')} />
+                            <img src={drink1} alt="recommend1" className={cx('item-img')} />
                             <div className={cx('item-info')}>
                                 <p className={cx('item-title')}>Pizza Phô Mai Cao Cấp</p>
                                 <div className={cx('item-price-box')}>
@@ -32,13 +32,6 @@ function Pizza() {
                             </div>
                         </div>
                         <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>3</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>4</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>5</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>6</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>7</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>8</div>
-                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>9</div>
                     </div>
                 </div>
             </section>
@@ -46,4 +39,4 @@ function Pizza() {
     );
 }
 
-export default Pizza;
+export default Drink;

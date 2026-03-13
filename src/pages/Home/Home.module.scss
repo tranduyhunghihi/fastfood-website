@@ -2,7 +2,7 @@
     width: 100%;
     margin: 0 auto;
     border-radius: 12px;
-    overflow: hidden;
+    // overflow: hidden;
 }
 
 .swiper {
@@ -17,4 +17,10 @@
     width: 100%;
     object-fit: cover;
 }
-
+.sidebar{
+    width: 1200px;
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-direction: column;
+}

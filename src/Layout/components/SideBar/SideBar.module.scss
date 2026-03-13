@@ -92,6 +92,21 @@
 .sidebar-item.active::after{
     transform: translateX(-50%) scaleX(1);
 }
+.item-link{
+    display: flex;
+    text-decoration: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-link:visited{
+    color: inherit;
+}
+
+.item-link:active{
+    color: inherit;
+}
 .icon{
     font-size: 2rem;
 }

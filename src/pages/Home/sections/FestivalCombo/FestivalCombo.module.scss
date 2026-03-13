@@ -56,8 +56,8 @@
     border: 1px solid #e5e7eb;
     overflow: hidden;
     display: flex;
-    cursor: pointer;
     flex-direction: column;
+    cursor: pointer;
     padding: 0;
     &:hover  .item-img{
         transform: scale(1.1);
@@ -87,6 +87,7 @@
     font-weight: 600;
     line-height: 2.4rem;
     margin-bottom: 8px;
+
 }
 .item-price-box{
 

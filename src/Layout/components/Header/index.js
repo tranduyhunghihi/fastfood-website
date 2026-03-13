@@ -6,6 +6,7 @@ import { faBell, faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import { faCartShopping, faBars } from '@fortawesome/free-solid-svg-icons';
 import { VietNameseIcon } from '../../../components/Icon/Icon';
 import logo from '../../../public/assets/image/logo.png';
+import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
@@ -37,12 +38,20 @@ const MENU_LANGUAGE = [
         language: 'English',
     },
 ];
+
+const ScrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
+};
+
 function Header() {
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('logo-container')}>
+            <Link to="/" className={cx('logo-container')} onClick={ScrollToTop}>
                 <img className={cx('logo')} src={logo} alt="logo" />
-            </div>
+            </Link>
             <div className={cx('action')}>
                 <FontAwesomeIcon className={cx('icon')} icon={faBell} />
                 <Tippy
@@ -65,10 +74,12 @@ function Header() {
                         <VietNameseIcon />
                     </div>
                 </Tippy>
-                <div className={cx('btn-action')}>
-                    <p className={cx('cart-count')}>0</p>
-                    <FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />
-                </div>
+                <Link to="/cart">
+                    <div className={cx('btn-action')}>
+                        <p className={cx('cart-count')}>0</p>
+                        <FontAwesomeIcon className={cx('icon')} icon={faCartShopping} />
+                    </div>
+                </Link>
                 <Tippy
                     render={(attrs) => (
                         <ul className={cx('menu-user')} tabIndex={-1} {...attrs}>
