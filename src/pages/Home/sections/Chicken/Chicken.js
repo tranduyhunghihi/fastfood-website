@@ -32,6 +32,11 @@ function Chicken() {
                             </div>
                         </div>
                         <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
+                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
+                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
+                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
+                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
+                        <div className={`${cx('item-container')} col c-5-5 c-o-0-3`}>2</div>
                     </div>
                 </div>
             </section>

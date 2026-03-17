@@ -1,5 +1,5 @@
 @import 'normalize.css';
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 :root{
     --primary-color: white;
     --shadow: 0 25px 50px -12px rgba(0, 0, 0, .25)
@@ -13,8 +13,10 @@ html{
     scroll-behavior: smooth;
 
 }
-body{
-    font-family: 'Roboto', 'sans-serif';
+
+body{ 
+    font-family: "Rubik", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 1.6rem;
     line-height: 1.5;
     text-rendering: optimizeSpeed;

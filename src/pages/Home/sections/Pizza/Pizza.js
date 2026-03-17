@@ -11,7 +11,7 @@ function Pizza() {
     return (
         <div className={cx('wrapper')}>
             <section id="pizza" className={cx('container')}>
-                <h2 className={cx('title')}>NEW PIZZA</h2>
+                <h2 className={cx('title')}>PIZZA</h2>
                 <div className={cx('banner')} style={{ backgroundImage: `url(${banner})` }}></div>
                 <div className="grid wide">
                     <div className="row">

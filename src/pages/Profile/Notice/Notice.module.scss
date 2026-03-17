@@ -1,0 +1,32 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.heading{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+.heading-title{
+    font-size: 2.6rem;
+    font-weight: 600;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.icon{
+    font-size: 12rem;
+    color: rgb(207, 207, 207);
+}
+.notice-title{
+        font-size: 2.6rem;
+        font-weight: 600;
+}
+.notice-text{
+        font-size: 1.6rem;
+}

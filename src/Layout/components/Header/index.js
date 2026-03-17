@@ -16,6 +16,7 @@ const MENU_USER = [
     },
     {
         title: 'Hồ sơ của tôi',
+        link: '/profile',
     },
     {
         title: 'Hiển thị mã QR',
@@ -85,7 +86,7 @@ function Header() {
                         <ul className={cx('menu-user')} tabIndex={-1} {...attrs}>
                             {MENU_USER.map((item, index) => (
                                 <li key={index} className={cx('menu-item')}>
-                                    {item.title}
+                                    <Link to={item.link}>{item.title}</Link>
                                 </li>
                             ))}
                         </ul>

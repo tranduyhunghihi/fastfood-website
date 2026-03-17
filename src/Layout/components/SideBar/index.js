@@ -26,56 +26,57 @@ const SIDE_BAR = [
     {
         icon: <FontAwesomeIcon icon={faSistrix} />,
         title: 'Tìm kiếm',
+        type: 'search',
     },
     {
         icon: <FontAwesomeIcon icon={faThumbsUp} />,
         title: 'BẠN SẼ THÍCH',
-        link: '#recommend',
+        id: 'recommend',
     },
     {
         icon: <FontAwesomeIcon icon={faBreadSlice} />,
         title: 'BÁNH MỚI',
-        link: '#newpizza',
+        id: 'newpizza',
     },
     {
         icon: <FontAwesomeIcon icon={faCookieBite} />,
         title: 'MUA 1 TẶNG 1',
-        link: '#buy1get1',
+        id: 'buy1get1',
     },
     {
         icon: <FontAwesomeIcon icon={faBreadSlice} />,
         title: 'COMBO MÙA LỄ',
-        link: '#festival-combo',
+        id: 'festival-combo',
     },
     {
         icon: <FontAwesomeIcon icon={faPizzaSlice} />,
         title: 'PIZZA',
-        link: '#pizza',
+        id: 'pizza',
     },
     {
         icon: <FontAwesomeIcon icon={faDrumstickBite} />,
         title: 'GÀ',
-        link: '#chicken',
+        id: 'chicken',
     },
     {
         icon: <FontAwesomeIcon icon={faCheese} />,
         title: 'MÓN KHAI VỊ',
-        link: '#starter',
+        id: 'starter',
     },
     {
         icon: <FontAwesomeIcon icon={faBoxOpen} />,
         title: 'MY BOX',
-        link: '#mybox',
+        id: 'mybox',
     },
     {
         icon: <FontAwesomeIcon icon={faGlassWater} />,
         title: 'THỨC UỐNG',
-        link: '#drink',
+        id: 'drink',
     },
     {
         icon: <FontAwesomeIcon icon={faFire} />,
         title: 'MENU 49K',
-        link: '#menu49k',
+        id: 'menu49k',
     },
     {
         icon: <FontAwesomeIcon icon={faPepperHot} />,
@@ -89,10 +90,15 @@ const SIDE_BAR = [
 
 function SideBar() {
     const listRef = useRef(null);
+    const inputRef = useRef(null);
+    const isClickingRef = useRef(false);
+    const scrollTimeout = useRef(null);
+    const itemRefs = useRef([]);
 
     const [showLeft, setShowLeft] = useState(true);
     const [showRight, setShowRight] = useState(true);
-    const [activeIndex, setActiveIndex] = useState(1);
+    // const [activeIndex, setActiveIndex] = useState(1);
+    const [active, setActive] = useState('recommend');
     const [input, setInput] = useState('');
     const [focus, setFocus] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
@@ -108,6 +114,56 @@ function SideBar() {
         setShowLeft(!atStart);
         setShowRight(!atEnd);
     };
+    useEffect(() => {
+        const index = SIDE_BAR.findIndex((item) => item.id === active);
+
+        const el = itemRefs.current[index];
+        const container = listRef.current;
+
+        if (el && container) {
+            const elLeft = el.offsetLeft;
+            const elWidth = el.offsetWidth;
+            const containerWidth = container.offsetWidth;
+
+            container.scrollTo({
+                left: elLeft - containerWidth / 2 + elWidth / 2,
+                behavior: 'smooth',
+            });
+        }
+    }, [active]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (isClickingRef.current) {
+                clearTimeout(scrollTimeout.current);
+
+                scrollTimeout.current = setTimeout(() => {
+                    isClickingRef.current = false;
+                }, 120);
+                return;
+            }
+            const sections = document.querySelectorAll('section');
+
+            let current = '';
+            let min = Infinity;
+
+            sections.forEach((section) => {
+                const rect = section.getBoundingClientRect();
+                const distance = Math.abs(rect.top - 150); // 100 = header
+
+                if (distance < min) {
+                    min = distance;
+                    current = section.id;
+                }
+            });
+
+            if (current) setActive(current);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const scrollLeft = () => {
         listRef.current.scrollBy({
@@ -129,11 +185,14 @@ function SideBar() {
 
     const handleClear = () => {
         setInput('');
+        inputRef.current.focus();
     };
 
-    const scrollToSection = (link) => {
-        const section = document.querySelector(link);
-        section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const scrollTo = (id) => {
+        document.getElementById(id).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+        });
     };
 
     return (
@@ -152,6 +211,7 @@ function SideBar() {
                 <div className={cx('search-box', { open: openSearch })}>
                     <div className={cx('input-container')}>
                         <input
+                            ref={inputRef}
                             className={cx('input-box')}
                             type="text"
                             value={input}
@@ -173,14 +233,17 @@ function SideBar() {
                 {SIDE_BAR.map((item, index) => (
                     <li
                         key={index}
-                        className={cx('sidebar-item', { active: activeIndex === index && index !== 0 })}
+                        ref={(el) => (itemRefs.current[index] = el)}
+                        className={cx('sidebar-item', { active: active === item.id })}
                         onClick={() => {
-                            setActiveIndex(index);
-                            if (index === 0) {
-                                setOpenSearch(true);
+                            if (item.id) {
+                                isClickingRef.current = true;
+                                scrollTo(item.id);
+                                setActive(item.id);
                             }
-                            if (item.link) {
-                                scrollToSection(item.link);
+                            if (item.type === 'search') {
+                                setOpenSearch(true);
+                                return;
                             }
                         }}
                     >
