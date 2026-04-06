@@ -42,8 +42,15 @@ export function AuthProvider({ children }) {
         return userData;
     }, []);
 
-    const register = useCallback(async (name, email, password) => {
-        const res = await axiosInstance.post('/auth/register', { name, email, password });
+    // Bước 1: Gửi OTP về email
+    const sendOtp = useCallback(async (name, email, password) => {
+        const res = await axiosInstance.post('/auth/send-otp', { name, email, password });
+        return res.data;
+    }, []);
+
+    // Bước 2: Xác nhận OTP → tạo tài khoản và tự đăng nhập
+    const verifyOtp = useCallback(async (email, otp) => {
+        const res = await axiosInstance.post('/auth/verify-otp', { email, otp });
         const { token, ...userData } = res.data.data;
 
         localStorage.setItem('token', token);
@@ -73,7 +80,9 @@ export function AuthProvider({ children }) {
     const isLoggedIn = !!user;
 
     return (
-        <AuthContext.Provider value={{ user, loading, isLoggedIn, isAdmin, login, register, logout, updateUser }}>
+        <AuthContext.Provider
+            value={{ user, loading, isLoggedIn, isAdmin, login, sendOtp, verifyOtp, logout, updateUser }}
+        >
             {children}
         </AuthContext.Provider>
     );
