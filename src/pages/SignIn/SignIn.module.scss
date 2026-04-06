@@ -1,0 +1,218 @@
+/* ── Wrapper ──────────────────────────────────── */
+.wrapper {
+    width: 100%;
+    min-height: calc(100vh - 72px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #fff5f5 0%, #fff 60%, #fff8f0 100%);
+    padding: 24px 16px;
+}
+
+/* ── Card ─────────────────────────────────────── */
+.container {
+    width: 100%;
+    max-width: 440px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Title ────────────────────────────────────── */
+.title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: center;
+}
+
+/* ── Tab ──────────────────────────────────────── */
+.tab-box {
+    display: flex;
+    background: #f3f4f6;
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.tab {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #888;
+    cursor: pointer;
+    transition: all .2s;
+    &:hover { color: #333; }
+}
+
+.active {
+    background: #fff;
+    color: #c8102e;
+    font-weight: 700;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Form ─────────────────────────────────────── */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ── Input group ──────────────────────────────── */
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: #555;
+    }
+}
+
+.input-box {
+    width: 100%;
+    height: 48px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0 16px;
+    font-size: 1.5rem;
+    color: #1a1a1a;
+    background: #fafafa;
+    outline: none;
+    transition: border-color .2s, background .2s;
+
+    &::placeholder { color: #bbb; }
+    &:focus { border-color: #c8102e; background: #fff; }
+}
+
+/* ── Error ────────────────────────────────────── */
+.error {
+    font-size: 1.4rem;
+    color: #c8102e;
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+}
+
+/* ── Submit button ────────────────────────────── */
+.btn-submit {
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 14px;
+    background: #c8102e;
+    color: #fff;
+    font-size: 1.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    letter-spacing: .3px;
+
+    &:hover { background: #a80d26; }
+    &:active { transform: scale(.98); }
+}
+
+.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ── Back link ────────────────────────────────── */
+.btn-back {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #888;
+    display: block;
+    transition: color .15s;
+    &:hover { color: #c8102e; }
+}
+
+/* ── OTP step ─────────────────────────────────── */
+.otp-icon {
+    text-align: center;
+    font-size: 4rem;
+}
+
+.otp-desc {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #555;
+    line-height: 1.6;
+
+    strong { color: #1a1a1a; }
+}
+
+.otp-boxes {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.otp-box {
+    width: 52px;
+    height: 60px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    outline: none;
+    background: #fafafa;
+    transition: border-color .2s, background .2s;
+    caret-color: #c8102e;
+
+    &:focus {
+        border-color: #c8102e;
+        background: #fff;
+    }
+}
+
+.otp-filled {
+    border-color: #c8102e;
+    background: #fff5f5;
+    color: #c8102e;
+}
+
+.otp-footer {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #888;
+}
+
+.btn-resend {
+    background: none;
+    border: none;
+    color: #c8102e;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:disabled { color: #aaa; cursor: not-allowed; text-decoration: none; }
+}
+
+.btn-back-otp {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.4rem;
+    cursor: pointer;
+    text-align: center;
+    transition: color .15s;
+
+    &:hover { color: #333; }
+}

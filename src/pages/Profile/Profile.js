@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Profile.module.scss';
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRightFromBracket, faCircleUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
+import { useAuth } from '../../contexts/AuthContext';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +28,8 @@ const MENU_SIDEBAR = [
 ];
 
 function Profile({ children }) {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
     const [active, setActive] = useState(0);
     return (
         <div className={cx('wrapper')}>
@@ -58,7 +61,15 @@ function Profile({ children }) {
                         <div className={cx('sidebar-icon')}>
                             <FontAwesomeIcon icon={faArrowRightFromBracket} />
                         </div>
-                        <div className={cx('sidebar-title')}>Đăng xuất</div>
+                        <div
+                            className={cx('sidebar-title')}
+                            onClick={() => {
+                                logout();
+                                navigate('/');
+                            }}
+                        >
+                            Đăng xuất
+                        </div>
                     </div>
                 </div>
                 <div className={cx('main')}>

@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import DefaultLayout from './Layout/components/DefaultLayout';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 function App() {
     return (
@@ -11,22 +12,24 @@ function App() {
                     {publicRoutes.map((route, index) => {
                         const Layout = route.layout === null ? Fragment : DefaultLayout;
                         const Page = route.component;
+
+                        const element = (
+                            <Layout>
+                                <Page />
+                            </Layout>
+                        );
+
+                        // Route cần đăng nhập thì bọc PrivateRoute
+                        const wrappedElement = route.private ? <PrivateRoute>{element}</PrivateRoute> : element;
+
                         if (route.children) {
                             return (
-                                <Route
-                                    key={index}
-                                    path={route.path}
-                                    element={
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    }
-                                >
-                                    {route.children.map((child, index) => {
+                                <Route key={index} path={route.path} element={wrappedElement}>
+                                    {route.children.map((child, i) => {
                                         if (child.redirect) {
                                             return (
                                                 <Route
-                                                    key={index}
+                                                    key={i}
                                                     index
                                                     path={child.path}
                                                     element={<Navigate to={child.redirect} />}
@@ -34,21 +37,13 @@ function App() {
                                             );
                                         }
                                         const ChildPage = child.component;
-                                        return <Route key={index} path={child.path} element={<ChildPage />} />;
+                                        return <Route key={i} path={child.path} element={<ChildPage />} />;
                                     })}
                                 </Route>
                             );
                         }
-                        return (
-                            <Route
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
-                        );
+
+                        return <Route key={index} path={route.path} element={wrappedElement} />;
                     })}
                 </Routes>
             </div>

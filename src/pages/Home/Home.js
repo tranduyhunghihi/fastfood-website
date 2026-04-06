@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -10,20 +11,31 @@ import banner2 from '../../public/assets/image/banner2.webp';
 import banner3 from '../../public/assets/image/banner3.webp';
 import banner4 from '../../public/assets/image/banner4.webp';
 import SideBar from '../../Layout/components/SideBar';
-import Recommend from '../../pages/Home/sections/Recommend/Recommend';
-import NewPizza from '../../pages/Home/sections/NewPizza/NewPizza';
-import Buy1Get1 from '../../pages/Home/sections/Buy1Get1/Buy1Get1';
-import FestivalCombo from '../../pages/Home/sections/FestivalCombo/FestivalCombo';
-import Pizza from '../../pages/Home/sections/Pizza/Pizza';
-import Chicken from '../../pages/Home/sections/Chicken/Chicken';
-import Starter from '../../pages/Home/sections/Starter/Starter';
-import MyBox from '../../pages/Home/sections/MyBox/MyBox';
-import Drink from '../../pages/Home/sections/Drink/Drink';
-import Menu49k from '../../pages/Home/sections/Menu49k/Menu49k';
+import CategorySection from './sections/CategorySection/CategorySection';
+import ComboSection from './sections/ComboSection/ComboSection';
+import SearchResults from './sections/SearchResults/SearchResults';
+import axiosInstance from '../../axios/axiosInstance';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const [categories, setCategories] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
+
+    useEffect(() => {
+        axiosInstance
+            .get('/categories')
+            .then((res) => setCategories(res.data.data || []))
+            .catch(console.error);
+    }, []);
+
+    // Lắng nghe event từ SideBar
+    useEffect(() => {
+        const handler = (e) => setSearchKeyword(e.detail || '');
+        window.addEventListener('sidebar-search', handler);
+        return () => window.removeEventListener('sidebar-search', handler);
+    }, []);
+
     return (
         <div className={cx('wrapper')}>
             <Swiper
@@ -38,28 +50,29 @@ function Home() {
                     <img src={banner1} alt="banner1" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={banner2} alt="banner1" />
+                    <img src={banner2} alt="banner2" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={banner3} alt="banner1" />
+                    <img src={banner3} alt="banner3" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <img src={banner4} alt="banner1" />
+                    <img src={banner4} alt="banner4" />
                 </SwiperSlide>
             </Swiper>
+
             <div className={cx('sidebar')}>
                 <SideBar />
                 <div className={cx('content')}>
-                    <Recommend />
-                    <NewPizza />
-                    <Buy1Get1 />
-                    <FestivalCombo />
-                    <Pizza />
-                    <Chicken />
-                    <Starter />
-                    <MyBox />
-                    <Drink />
-                    <Menu49k />
+                    {searchKeyword ? (
+                        <SearchResults keyword={searchKeyword} onClose={() => setSearchKeyword('')} />
+                    ) : (
+                        <>
+                            <ComboSection />
+                            {categories.map((category) => (
+                                <CategorySection key={category._id} category={category} />
+                            ))}
+                        </>
+                    )}
                 </div>
             </div>
         </div>

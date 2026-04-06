@@ -1,92 +1,85 @@
 import { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSistrix } from '@fortawesome/free-brands-svg-icons';
-import { faCircleXmark, faThumbsUp } from '@fortawesome/free-regular-svg-icons';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import {
     faAngleLeft,
     faAngleRight,
+    faUtensils,
+    faPizzaSlice,
+    faDrumstickBite,
+    faCheese,
+    faGlassWater,
     faBoxOpen,
     faBreadSlice,
-    faCheese,
     faCookieBite,
-    faDrumstickBite,
     faFire,
-    faGlassWater,
-    faPepperHot,
-    faPizzaSlice,
+    faIceCream,
+    faBurger,
+    faStar,
+    faLeaf,
+    faFish,
+    faBacon,
+    faEgg,
+    faCakeCandles,
+    faMugHot,
+    faWineGlass,
+    faBowlFood,
+    faShrimp,
+    faCarrot,
+    faAppleWhole,
+    faLemon,
+    faBowlRice,
+    faHotdog,
     faSeedling,
+    faGift,
 } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames/bind';
 import styles from './SideBar.module.scss';
+import axiosInstance from '../../../axios/axiosInstance';
+import { useDebounce } from '../../../hooks';
 
 const cx = classNames.bind(styles);
 
-const SIDE_BAR = [
-    {
-        icon: <FontAwesomeIcon icon={faSistrix} />,
-        title: 'Tìm kiếm',
-        type: 'search',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faThumbsUp} />,
-        title: 'BẠN SẼ THÍCH',
-        id: 'recommend',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faBreadSlice} />,
-        title: 'BÁNH MỚI',
-        id: 'newpizza',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faCookieBite} />,
-        title: 'MUA 1 TẶNG 1',
-        id: 'buy1get1',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faBreadSlice} />,
-        title: 'COMBO MÙA LỄ',
-        id: 'festival-combo',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faPizzaSlice} />,
-        title: 'PIZZA',
-        id: 'pizza',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faDrumstickBite} />,
-        title: 'GÀ',
-        id: 'chicken',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faCheese} />,
-        title: 'MÓN KHAI VỊ',
-        id: 'starter',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faBoxOpen} />,
-        title: 'MY BOX',
-        id: 'mybox',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faGlassWater} />,
-        title: 'THỨC UỐNG',
-        id: 'drink',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faFire} />,
-        title: 'MENU 49K',
-        id: 'menu49k',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faPepperHot} />,
-        title: 'CAY',
-    },
-    {
-        icon: <FontAwesomeIcon icon={faSeedling} />,
-        title: 'CHAY',
-    },
-];
+const ICON_MAP = {
+    faUtensils,
+    faPizzaSlice,
+    faDrumstickBite,
+    faCheese,
+    faGlassWater,
+    faBoxOpen,
+    faBreadSlice,
+    faCookieBite,
+    faFire,
+    faIceCream,
+    faBurger,
+    faStar,
+    faLeaf,
+    faFish,
+    faBacon,
+    faEgg,
+    faCakeCandles,
+    faMugHot,
+    faWineGlass,
+    faBowlFood,
+    faShrimp,
+    faCarrot,
+    faAppleWhole,
+    faLemon,
+    faBowlRice,
+    faHotdog,
+    faSeedling,
+    faGift,
+};
+
+const resolveIcon = (iconName) => {
+    if (!iconName) return faUtensils;
+    return ICON_MAP[iconName] ?? faUtensils;
+};
+
+// Items cố định — không fetch từ API
+const SEARCH_ITEM = { slug: '__search__', type: 'search', name: 'Tìm kiếm', _icon: faSistrix };
+const COMBO_ITEM = { slug: 'combo', type: 'fixed', name: 'COMBO', _icon: faGift };
 
 function SideBar() {
     const listRef = useRef(null);
@@ -95,105 +88,93 @@ function SideBar() {
     const scrollTimeout = useRef(null);
     const itemRefs = useRef([]);
 
-    const [showLeft, setShowLeft] = useState(true);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [showLeft, setShowLeft] = useState(false);
     const [showRight, setShowRight] = useState(true);
-    // const [activeIndex, setActiveIndex] = useState(1);
-    const [active, setActive] = useState('recommend');
+    const [active, setActive] = useState('combo');
     const [input, setInput] = useState('');
     const [focus, setFocus] = useState(false);
     const [openSearch, setOpenSearch] = useState(false);
 
-    const scrollAmount = 300;
+    const debouncedSearch = useDebounce(input, 400);
 
-    const checkScroll = () => {
-        const el = listRef.current;
-
-        const atStart = el.scrollLeft === 0;
-        const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth;
-
-        setShowLeft(!atStart);
-        setShowRight(!atEnd);
-    };
     useEffect(() => {
-        const index = SIDE_BAR.findIndex((item) => item.id === active);
+        axiosInstance
+            .get('/categories')
+            .then((res) => {
+                const data = res.data.data || [];
+                setCategories(data);
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, []);
 
+    useEffect(() => {
+        if (!listRef.current) return;
+        const allItems = [SEARCH_ITEM, COMBO_ITEM, ...categories];
+        const index = allItems.findIndex((item) => item.slug === active);
+        if (index === -1) return;
         const el = itemRefs.current[index];
         const container = listRef.current;
-
         if (el && container) {
-            const elLeft = el.offsetLeft;
-            const elWidth = el.offsetWidth;
-            const containerWidth = container.offsetWidth;
-
             container.scrollTo({
-                left: elLeft - containerWidth / 2 + elWidth / 2,
+                left: el.offsetLeft - container.offsetWidth / 2 + el.offsetWidth / 2,
                 behavior: 'smooth',
             });
         }
-    }, [active]);
+    }, [active, categories]);
 
     useEffect(() => {
         const handleScroll = () => {
             if (isClickingRef.current) {
                 clearTimeout(scrollTimeout.current);
-
                 scrollTimeout.current = setTimeout(() => {
                     isClickingRef.current = false;
                 }, 120);
                 return;
             }
-            const sections = document.querySelectorAll('section');
-
-            let current = '';
-            let min = Infinity;
-
+            const sections = document.querySelectorAll('section[id]');
+            let current = '',
+                min = Infinity;
             sections.forEach((section) => {
-                const rect = section.getBoundingClientRect();
-                const distance = Math.abs(rect.top - 150); // 100 = header
-
-                if (distance < min) {
-                    min = distance;
+                const dist = Math.abs(section.getBoundingClientRect().top - 150);
+                if (dist < min) {
+                    min = dist;
                     current = section.id;
                 }
             });
-
             if (current) setActive(current);
         };
-
         window.addEventListener('scroll', handleScroll);
-
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const scrollLeft = () => {
-        listRef.current.scrollBy({
-            left: -scrollAmount,
-            behavior: 'smooth',
-        });
-    };
+    const scrollAmount = 300;
 
-    const scrollRight = () => {
-        listRef.current.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth',
-        });
+    const checkScroll = () => {
+        const el = listRef.current;
+        if (!el) return;
+        setShowLeft(el.scrollLeft > 0);
+        setShowRight(Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth);
     };
 
     useEffect(() => {
         checkScroll();
-    }, []);
+    }, [categories]);
 
+    const scrollLeft = () => listRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    const scrollRight = () => listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     const handleClear = () => {
         setInput('');
-        inputRef.current.focus();
+        inputRef.current?.focus();
+    };
+    const scrollToSection = (slug) => {
+        document.getElementById(slug)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
-    const scrollTo = (id) => {
-        document.getElementById(id).scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-        });
-    };
+    // Search + Combo cố định + categories từ API
+    const sidebarItems = [SEARCH_ITEM, COMBO_ITEM, ...categories];
 
     return (
         <div className={cx('wrapper')}>
@@ -207,50 +188,93 @@ function SideBar() {
                     <FontAwesomeIcon icon={faAngleRight} />
                 </div>
             )}
-            {
-                <div className={cx('search-box', { open: openSearch })}>
-                    <div className={cx('input-container')}>
-                        <input
-                            ref={inputRef}
-                            className={cx('input-box')}
-                            type="text"
-                            value={input}
-                            placeholder="Tìm kiếm mọi thứ bạn muốn"
-                            onChange={(e) => setInput(e.target.value)}
-                            onFocus={() => setFocus(true)}
-                        />
-                        {focus && input && (
-                            <FontAwesomeIcon className={cx('btn-clear')} icon={faCircleXmark} onClick={handleClear} />
-                        )}
-                    </div>
-                    <button className={cx('btn-search')}>Tìm kiếm</button>
-                    <p className={cx('btn-close')} onClick={() => setOpenSearch(false)}>
-                        Đóng
-                    </p>
-                </div>
-            }
-            <ul className={cx('sidebar-list')} ref={listRef} onScroll={checkScroll}>
-                {SIDE_BAR.map((item, index) => (
-                    <li
-                        key={index}
-                        ref={(el) => (itemRefs.current[index] = el)}
-                        className={cx('sidebar-item', { active: active === item.id })}
-                        onClick={() => {
-                            if (item.id) {
-                                isClickingRef.current = true;
-                                scrollTo(item.id);
-                                setActive(item.id);
-                            }
-                            if (item.type === 'search') {
-                                setOpenSearch(true);
-                                return;
+
+            <div className={cx('search-box', { open: openSearch })}>
+                <div className={cx('input-container')}>
+                    <input
+                        ref={inputRef}
+                        className={cx('input-box')}
+                        type="text"
+                        value={input}
+                        placeholder="Tìm kiếm mọi thứ bạn muốn"
+                        onChange={(e) => setInput(e.target.value)}
+                        onFocus={() => setFocus(true)}
+                        onBlur={() => setFocus(false)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                window.dispatchEvent(new CustomEvent('sidebar-search', { detail: input.trim() }));
+                                setOpenSearch(false);
                             }
                         }}
-                    >
-                        <div className={cx('icon')}>{item.icon}</div>
-                        <p className={cx('title')}>{item.title}</p>
-                    </li>
-                ))}
+                    />
+                    {input && (
+                        <FontAwesomeIcon
+                            className={cx('btn-clear')}
+                            icon={faCircleXmark}
+                            onMouseDown={(e) => {
+                                e.preventDefault(); // giữ focus không bị blur
+                                handleClear();
+                            }}
+                        />
+                    )}
+                </div>
+                <button
+                    className={cx('btn-search')}
+                    onClick={() => {
+                        const keyword = input.trim();
+                        window.dispatchEvent(new CustomEvent('sidebar-search', { detail: keyword }));
+                        setOpenSearch(false);
+                        handleClear();
+                    }}
+                >
+                    Tìm kiếm
+                </button>
+                <p
+                    className={cx('btn-close')}
+                    onClick={() => {
+                        setOpenSearch(false);
+                        setInput('');
+                    }}
+                >
+                    Đóng
+                </p>
+            </div>
+
+            <ul className={cx('sidebar-list')} ref={listRef} onScroll={checkScroll}>
+                {loading
+                    ? Array.from({ length: 6 }).map((_, i) => <li key={i} className={cx('sidebar-item', 'skeleton')} />)
+                    : sidebarItems.map((item, index) => {
+                          const isSearch = item.type === 'search';
+                          const isFixed = item.type === 'fixed';
+
+                          // Icon: search/combo dùng _icon, category dùng ICON_MAP
+                          const icon =
+                              isSearch || isFixed ? (
+                                  <FontAwesomeIcon icon={item._icon} />
+                              ) : (
+                                  <FontAwesomeIcon icon={resolveIcon(item.icon)} />
+                              );
+
+                          return (
+                              <li
+                                  key={item.slug}
+                                  ref={(el) => (itemRefs.current[index] = el)}
+                                  className={cx('sidebar-item', { active: active === item.slug })}
+                                  onClick={() => {
+                                      if (isSearch) {
+                                          setOpenSearch(true);
+                                          return;
+                                      }
+                                      isClickingRef.current = true;
+                                      scrollToSection(item.slug);
+                                      setActive(item.slug);
+                                  }}
+                              >
+                                  <div className={cx('icon')}>{icon}</div>
+                                  <p className={cx('title')}>{item.name}</p>
+                              </li>
+                          );
+                      })}
             </ul>
         </div>
     );

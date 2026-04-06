@@ -1,6 +1,6 @@
 .wrapper{
     display: flex;
-    width: 100%;
+    width: 1220px;
     overflow: hidden;
     height: 80px;
     position: sticky;
@@ -68,8 +68,7 @@
     justify-content: center;
     align-items: center;
     padding: 24px 24px 12px;
-    height: 26px;
-    min-width: 80px;
+    height: 62px;
     white-space: nowrap;
     transition: all;
     position: relative;
@@ -144,7 +143,7 @@
     width: 100%;
     height: 44px;
     border-radius: 6px;
-    padding-left: 12px;
+    padding: 0 12px;
     border: 1px solid #e1e1e1;
     &:hover{
         border-color: #c8102e;
@@ -172,7 +171,7 @@
 .btn-clear{
     position: absolute;
     top: 50%;
-    right: 0;
+    right: 10px;
     transform: translateY(-50%);    
     cursor: pointer;
     color: #5b5b5b;
