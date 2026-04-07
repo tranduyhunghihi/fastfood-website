@@ -18,7 +18,7 @@ const publicRoutes = [
     { path: '/cart', component: Cart },
     { path: '/sign-in', component: SignIn },
     { path: '/order-tracking', component: Order },
-    { path: '/vnpay-return', component: VnpayReturn },
+    { path: '/payment/vnpay-return', component: VnpayReturn },
     { path: '/products/:slug', component: ProductDetail },
     { path: '/combos/:slug', component: ComboDetail },
     { path: '/support', component: Support },
