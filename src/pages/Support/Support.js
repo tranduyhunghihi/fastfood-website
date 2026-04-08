@@ -52,7 +52,7 @@ export default function Support() {
     const sessionId = getSessionId();
 
     useEffect(() => {
-        const socket = io(SOCKET_URL, { transports: ['websocket'] });
+        const socket = io(SOCKET_URL, { transports: ['websocket', 'polling'] });
         socketRef.current = socket;
 
         socket.on('connect', () => {
