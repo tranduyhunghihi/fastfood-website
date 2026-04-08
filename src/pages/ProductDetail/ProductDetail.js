@@ -14,6 +14,7 @@ import classNames from 'classnames/bind';
 import styles from './ProductDetail.module.scss';
 import axiosInstance from '../../axios/axiosInstance';
 import { useCart } from '../../contexts/CartContext';
+import ReviewSection from './ReviewSection';
 
 const cx = classNames.bind(styles);
 
@@ -367,6 +368,7 @@ function ProductDetail() {
                     </div>
                 </div>
             )}
+            <ReviewSection productId={product._id} />
         </div>
     );
 }
